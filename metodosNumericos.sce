@@ -3,7 +3,7 @@ function y=derivacionNumerica(p, valor, h)
     y = (horner(p,valor + h) - horner(p,valor))/h;
 endfunction
 
-function x=newtonRapson(p, xi, epsilon)
+function x=newtonRapson(p, xi, epsilon)//polinomio, xi inicial, epsilon opcional
     printf('### Newton Rapson:\n');
     if (exists("epsilon") == 0)
         epsilon = 1e-7;
@@ -21,7 +21,7 @@ function x=newtonRapson(p, xi, epsilon)
     x = xi;
 endfunction
 
-function z=diferenciasDivididasNewton(x,y)
+function z=diferenciasDivididasNewton(x,y)//coordenadas en x, coordenadas en y
     printf("### Diferencias divididas de newton:\n");
     s = length(x);
     dif = zeros(1,s);
@@ -47,21 +47,26 @@ function z=diferenciasDivididasNewton(x,y)
     disp(dif);
     
     printf("\nPolinomios:\n");//pn
+    polis = [];
     pn = poly([0],'x','c');//0
     for i=1:s
+        //printf("-------------------------\n");
         p1 = poly([dif(i)], 'x', 'c');
         p2 = poly([0,1],'x','c');//x
         p3 = poly([1],'x','c');//1
         for j=2:i
+            //disp(p2 - x(j-1));
             p3 = p3 * (p2 - x(j-1));
         end
         printf("grado %d\n", i-1);
         disp(p1*p3);
-        pn = pn + p1*p3;
+        polis = [polis,p1*p3];
+        pn = pn + (p1*p3);
     end
+    printf("total polinomios:\n");
+    disp(polis);
     printf("\nPolinomio interpolador:\n");
     disp(pn);
-    
     z=pn;
 endfunction
 
